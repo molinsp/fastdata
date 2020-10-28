@@ -2,7 +2,8 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"FastDataUtilities": "00_core.ipynb"}
+index = {"FastDataUtilities": "00_core.ipynb",
+         "generate_function_call_from_form": "00_core.ipynb"}
 
 modules = ["core.py"]
 
