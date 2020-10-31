@@ -4,8 +4,7 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"FastDataDataframeUtilities": "00_core.ipynb",
          "FastDataSeriesUtilities": "00_core.ipynb",
-         "extract_number_from_string": "00_core.ipynb",
-         "generate_function_call_from_form": "00_core.ipynb"}
+         "extract_number_from_string": "00_core.ipynb"}
 
 modules = ["core.py"]
 
