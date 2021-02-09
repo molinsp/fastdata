@@ -1,5 +1,5 @@
-# fastada
+# fastdata
 
-Fastdata is aimed at giving a more user-friendly api for manyof the most common data transformations with Pandas.
+Fastdata provides a user-friendly api for the most common data transformations with Pandas, so that user can focus on solving problems with data.
 
-It has been designed to be used with the eigendta jupyterlab extension.
+It is part of the [Eigendata](http://eigendata.co) ecosystem.
