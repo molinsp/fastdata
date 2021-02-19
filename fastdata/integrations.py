@@ -83,7 +83,12 @@ def df_to_gsheet(url, df, append=False, index=True, headers=True, start=(1, 1), 
         df = cast_for_gsheets(df)
         df = df.fillna('')
         values = df.values.tolist()
-        ss = ws.get_worksheet(sheet)
+        #
+        if type(sheet) == int:
+            ss = ws.get_worksheet(sheet)
+        elif type(sheet) == str:
+            ss = ws.worksheet(sheet)
+
         if ss == None:
             raise Exception('Could not find sheet (tab). Check the sheet number exists (first sheet is 0).')
         else:

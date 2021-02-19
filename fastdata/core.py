@@ -3,7 +3,7 @@
 __all__ = ['is_default_index', 'is_multiindex_row_df', 'is_multiindex_col_df', 'regex_pattern',
            'FastDataDataframeUtilities', 'split_list_to_columns', 'pivot_table', 'clean_text_columns',
            'FastDataSeriesUtilities', 'clean_text_column', 'bin_column', 'fill_empty', 'replace_based_on_condition',
-           'extract_json']
+           'extract_json', 'add_timedelta']
 
 # Cell
 import pandas as pd
@@ -231,3 +231,9 @@ def extract_json(self, path):
     elif type_of_first_not_null_element == dict:
         series = series.apply(lambda x: jmespath.search(path,x))
     return series
+
+# Cell
+@patch_to(FastDataSeriesUtilities)
+def add_timedelta(self, value, unit=None, **kwargs):
+    series = self._obj
+    return series + pd.Timedelta(value, unit=None, **kwargs)
