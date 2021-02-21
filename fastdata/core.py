@@ -145,7 +145,7 @@ def count_nulls(self):
     df = self._obj.copy()
     null_count = df.isnull().sum()
     null_percentage = null_count / len(df) * 100.0
-    return pd.DataFrame({'null_count': null_count, 'null_percent': null_percentage})
+    return pd.DataFrame({'null_count': null_count, 'null_percent': null_percentage}).reset_index().rename(columns={'index':'column'})
 
 # Cell
 @patch_to(FastDataDataframeUtilities)

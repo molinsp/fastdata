@@ -1,24 +1,9 @@
-# Project name here
-> Summary description here.
+# Fastdata
 
 
-This file will become your README and also the index of your documentation.
+
+The goal of the `fastdata` library is enable **fast data analysis** with `pandas`. It is part of the [Eigendata](http://eigendata.co) ecosystem.
 
 ## Install
 
-`pip install your_project_name`
-
-## How to use
-
-Fill me in please! Don't forget code examples:
-
-```python
-1+1
-```
-
-
-
-
-    2
-
-
+`pip install fastdata`

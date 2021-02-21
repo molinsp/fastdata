@@ -2,7 +2,6 @@
   "fastdata": {
     "Overview": "/",
     "utilities": "core.html",
-    "Airtable": "integrations.html",
-    "Title": "Untitled.html"
+    "Airtable": "integrations.html"
   }
 }
