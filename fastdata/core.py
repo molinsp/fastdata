@@ -144,7 +144,7 @@ def clean_text_columns(self, columns, regex=False, keep_unmatched=False, mode='c
 def count_nulls(self):
     df = self._obj.copy()
     null_count = df.isnull().sum()
-    null_percentage = null_count / len(fifa) * 100.0
+    null_percentage = null_count / len(df) * 100.0
     return pd.DataFrame({'null_count': null_count, 'null_percent': null_percentage})
 
 # Cell
