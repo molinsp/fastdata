@@ -1,5 +1,24 @@
-# fastdata
+# Project name here
+> Summary description here.
 
-Fastdata provides a user-friendly api for the most common data transformations with Pandas, so that user can focus on solving problems with data.
 
-It is part of the [Eigendata](http://eigendata.co) ecosystem.
+This file will become your README and also the index of your documentation.
+
+## Install
+
+`pip install your_project_name`
+
+## How to use
+
+Fill me in please! Don't forget code examples:
+
+```python
+1+1
+```
+
+
+
+
+    2
+
+

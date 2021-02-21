@@ -60,6 +60,8 @@ def gsheet_to_df(url, index=None, header_rows=1, start_row=1, unformatted_column
     return gsheet.sheet_to_df(index, header_rows, start_row, unformatted_columns, formula_columns, sheet)
 
 # Cell
+import gspread
+from gspread_pandas.util import fillna
 def df_to_gsheet(url, df, append=False, index=True, headers=True, start=(1, 1), replace=False, sheet=None,
                  raw_column_names=None, raw_columns=None, freeze_index=False, freeze_headers=False,
                  fill_value='', add_filter=False, merge_headers=False, flatten_headers_sep=None, creds=None):
@@ -70,6 +72,8 @@ def df_to_gsheet(url, df, append=False, index=True, headers=True, start=(1, 1), 
                      fill_value, add_filter, merge_headers, flatten_headers_sep)
     elif append==True:
         # Fall-back to gspread given there is no high-level function available in gspread pandas
+        df = fillna(df, fill_value)
+
         if creds==None:
             scopes = [
                 'https://www.googleapis.com/auth/spreadsheets',
@@ -80,10 +84,11 @@ def df_to_gsheet(url, df, append=False, index=True, headers=True, start=(1, 1), 
         else:
             gc = gspread.authorize(creds)
         ws = gc.open_by_url(url)
-        df = cast_for_gsheets(df)
-        df = df.fillna('')
+        df = fillna(df, fill_value)
+        df = cast_for_gsheets(df).replace('nan','').replace('NaT','').replace('<NA>','').fillna('')
         values = df.values.tolist()
-        #
+
+        # Handle sheets by name or index
         if type(sheet) == int:
             ss = ws.get_worksheet(sheet)
         elif type(sheet) == str:
