@@ -2,7 +2,7 @@
 
 __all__ = ['is_default_index', 'is_multiindex_row_df', 'is_multiindex_col_df', 'regex_pattern',
            'FastDataDataframeUtilities', 'split_list_to_columns', 'pivot_table', 'clean_text_columns', 'count_nulls',
-           'transpose', 'FastDataSeriesUtilities', 'clean_text_column', 'bin_column', 'fill_empty',
+           'transpose', 'fill_empty', 'FastDataSeriesUtilities', 'clean_text_column', 'bin_column', 'fill_empty',
            'replace_based_on_condition', 'extract_json', 'add_timedelta']
 
 # Cell
@@ -35,23 +35,30 @@ def is_multiindex_col_df(df):
 
 # Cell
 def regex_pattern(mode, **kwargs):
-    if mode == 'before_character':
-        original = '(.*)'
-        escaped_input = re.escape(kwargs['character'])
-        result = original + escaped_input + '.*'
+    if mode == 'keep_before_character':
+        # keep everything before a character
+        character = re.escape(kwargs['character'])
+        result = '(.*)' + character + '.*'
         return result
-    if mode == 'after_character':
-        original = '.*'
-        escaped_input = re.escape(kwargs['character'])
-        result = original + escaped_input + '(.*)'
+    if mode == 'keep_after_character':
+        # keep everything after a character
+        character = re.escape(kwargs['character'])
+        result = '.*' + character + '(.*)'
         return result
     if mode == 'email':
         return '([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)'
+    if mode == 'extract_number':
+        # E.g. for extracting zip codes
+        return '(\d+)'
     if mode == 'n_digits':
         # E.g. for extracting zip codes
         return '(\d{' + kwargs['digits'] + '})'
     if mode == 'between':
         return re.escape(kwargs['start']) + '(.*)' + re.escape(kwargs['end'])
+    if mode == 'range_start':
+        return "(-?\d*[.,]?\d*) ?- ?-?\d*[.,]?\d*"
+    if mode == 'range_end':
+        return "-?\d*[.,]?\d* ?- ?(-?\d*[.,]?\d*)"
 
 # Cell
 @pd.api.extensions.register_dataframe_accessor('fdt')
@@ -160,6 +167,27 @@ def transpose(self, index_type='flat', **kwargs):
         return df
 
 # Cell
+@patch_to(FastDataDataframeUtilities)
+def fill_empty(self, **kwargs):
+    df = self._obj.copy()
+    p = kwargs
+    if p['mode'] == 'function':
+        if p['function'] == 'ffill':
+            df = df.fillna(method='ffill')
+        elif p['function'] == 'bfill':
+            df = df.fillna(method='bfill')
+        elif p['function'] == 'mean':
+            df = df.fillna(df.mean())
+        elif p['function'] == 'most_frequent':
+            df = df.fillna(df.mode().iloc[0])
+        elif p['function'] == 'median':
+            df = df.fillna(df.median())
+    elif p['mode'] == 'value':
+        df = df.fillna(p['value'])
+
+    return df
+
+# Cell
 @pd.api.extensions.register_series_accessor('fdt')
 class FastDataSeriesUtilities:
     def __init__(self, pandas_obj):
@@ -172,6 +200,7 @@ def clean_text_column(self, regex=False, keep_unmatched = True, mode='custom', *
 
     if mode != 'custom':
         regex = regex_pattern(mode, **kwargs)
+
     if keep_unmatched == False:
         series = series.str.extract(regex, expand=False)
     elif keep_unmatched == True:
@@ -223,6 +252,8 @@ def fill_empty(self, **kwargs):
             series = series.fillna(series.mean())
         elif p['function'] == 'most_frequent':
             series = series.fillna(series.mode()[0])
+        elif p['function'] == 'median':
+            series = series.fillna(series.median())
     elif p['mode'] == 'value':
         series = series.fillna(p['value'])
 
