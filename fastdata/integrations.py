@@ -62,7 +62,7 @@ def gsheet_to_df(url, index=None, header_rows=1, start_row=1, unformatted_column
 # Cell
 import gspread
 from gspread_pandas.util import fillna
-def df_to_gsheet(url, df, append=False, index=True, headers=True, start=(1, 1), replace=False, sheet=None,
+def df_to_gsheet(df, url, append=False, index=True, headers=True, start=(1, 1), replace=False, sheet=None,
                  raw_column_names=None, raw_columns=None, freeze_index=False, freeze_headers=False,
                  fill_value='', add_filter=False, merge_headers=False, flatten_headers_sep=None, creds=None):
     if append==False:
