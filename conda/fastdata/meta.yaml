@@ -1,0 +1,48 @@
+package:
+  name: fastdata
+  version: 0.0.21
+source:
+  sha256: a2013b8914822cf7fe6f4a2c068e0b32c8abf0fca7501e58e8f96d0e3efde761
+  url: https://files.pythonhosted.org/packages/f2/57/8196378f263ffcc64c7a676ed62acdd74890e498acb17aa75906a7be52c0/fastdata-0.0.21.tar.gz
+about:
+  dev_url: https://molinsp.github.io
+  doc_url: https://molinsp.github.io
+  home: https://molinsp.github.io
+  license: Apache Software
+  license_family: APACHE
+  summary: A library to accelerate data-science productivity with Pandas. Best used
+    with the eigendata jupyterlab extension.
+build:
+  noarch: python
+  number: '0'
+  script: '{{ PYTHON }} -m pip install . -vv'
+extra:
+  recipe-maintainers:
+  - molinsp
+requirements:
+  host:
+  - pip
+  - python
+  - packaging
+  - pandas>=1.0.0
+  - numpy>=1.0.0
+  - fastcore>=1.1.0
+  - jmespath>=0.10.0
+  - gspread>=3.6.0
+  - gspread_pandas>=2.2.3
+  - airtable-python-wrapper>=0.15.1
+  run:
+  - pip
+  - python
+  - packaging
+  - pandas>=1.0.0
+  - numpy>=1.0.0
+  - fastcore>=1.1.0
+  - jmespath>=0.10.0
+  - gspread>=3.6.0
+  - gspread_pandas>=2.2.3
+  - airtable-python-wrapper>=0.15.1
+test:
+  imports:
+  - numpy
+  - fastdata
