@@ -4,7 +4,7 @@ __all__ = ['airtable_base_to_df', 'df_to_airtable_base', 'update_airtable_record
            'df_to_gsheet']
 
 # Cell
-from airtable import Airtable
+from pyairtable import Table
 import pandas as pd
 import gspread
 from gspread_pandas import Spread
@@ -12,9 +12,9 @@ from pathlib import Path
 import numpy as np
 
 # Cell
-def airtable_base_to_df(base, table, key, include_id=False):
-    airtable_base = Airtable(base, table, key)
-    records = airtable_base.get_all()
+def airtable_base_to_df(api_key, base_id, table_name, include_id=False):
+    airtable_base = Table(api_key, base_id, table_name)
+    records = airtable_base.all()
 
     if include_id == True:
         records_with_id = []
@@ -28,18 +28,22 @@ def airtable_base_to_df(base, table, key, include_id=False):
         return pd.DataFrame.from_records((r['fields'] for r in records))
 
 # Cell
-def df_to_airtable_base(data, base, table, key):
-    airtable_base = Airtable(base, table, key)
-    airtable_base.batch_insert(data.fillna('').to_dict(orient='records'))
+def df_to_airtable_base(df, api_key, base_id, table_name):
+    airtable_base = Table(api_key, base_id, table_name)
+    airtable_base.batch_create(df.fillna('').to_dict(orient='records'))
 
 # Cell
-def update_airtable_records(base, table, key, df, record_id_col='id'):
-    airtable_base = Airtable(base, table, key)
+def update_airtable_records(df, api_key, base_id, table_name, record_id_col='id',
+                            replace=False, typecast=False):
+    airtable_base = Table(api_key, base_id, table_name)
     records = df.to_dict(orient='records')
+    formatted_records = []
     for r in records:
         record_id = r[record_id_col]
         del r[record_id_col]
-        airtable_base.update(record_id, r)
+        formatted_records.append({'id': record_id, 'fields': r})
+
+    airtable_base.batch_update(formatted_records, replace, typecast)
 
 # Cell
 def cast_for_gsheets(df):
